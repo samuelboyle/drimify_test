@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Task Tracker{% endblock %}
+
+{% block body %}
+<div class="max-w-md mx-auto mt-8">
+    <h2 class="text-xl font-bold mb-4">Task Tracker</h2>
+    {% for message in app.flashes('error') %}
+        <div class="bg-red-500 text-white p-4 rounded mb-4">{{ message }}</div>
+    {% endfor %}
+    <form method="POST" action="/" class="mb-4 flex">
+        <input maxlength="100" name="title" class="border p-2 flex-grow rounded-l" placeholder="New task..." required>
+        <button class="bg-blue-500 text-white px-4 py-2 rounded-r">Add</button>
+    </form>
+    {% for task in tasks %}
+    <ul class="bg-white shadow-md rounded p-4">
+        <li class="flex justify-between items-center mb-2">
+            <span class="text-500 {% if task.isDone %}line-through text-gray-500{% endif %}">{{task.title}}</span>
+            {% if not task.isDone %}
+                <form method="POST" action="/tasks/{{task.id}}/toggle" class="inline">
+                    <button class="text-green-500">✔</button>
+                </form>
+            {% endif %}
+            <form method="POST" action="/tasks/{{task.id}}/delete" class="inline ml-2">
+                <button class="text-red-500">🗑</button>
+            </form>
+        </li>
+    </ul>
+    {% endfor %}
+</div>
+{% endblock %}
